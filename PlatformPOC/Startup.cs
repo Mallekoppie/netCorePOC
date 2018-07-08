@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using PlatformImplementation;
 using PlatformPOC.PlatformContracts;
 using PlatformPOC.PlatformImplementation;
+using Prometheus;
 using Serilog;
 
 namespace PlatformPOC
@@ -34,7 +35,7 @@ namespace PlatformPOC
 
             // Load Services from external assembly
             // TODO: Load assembly location from configuration
-            var assembly = Assembly.LoadFile(@"G:\Code\Source\projects\PlatformPOC\TestService\bin\Debug\netcoreapp2.0\TestService.dll");
+            var assembly = Assembly.LoadFile(@"G:\Code\Source\projects\netCorePOC\TestService\bin\Debug\netcoreapp2.0\TestService.dll");
             foreach (var serviceMethod in assembly.ExportedTypes)
             {
                 services.AddTransient(typeof(IServiceMethod), serviceMethod.UnderlyingSystemType);                
@@ -56,6 +57,9 @@ namespace PlatformPOC
             }
             
             app.UseMiddleware<PlatformMiddleware>();
+            app.UseMetricServer("/metrics");
+
+            
 
             app.UseMvc();
         }

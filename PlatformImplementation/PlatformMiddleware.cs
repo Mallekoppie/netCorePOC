@@ -5,6 +5,7 @@ using System.Net.Mime;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using PlatformPOC.PlatformContracts;
+using Prometheus;
 
 namespace PlatformImplementation
 {
@@ -32,6 +33,21 @@ namespace PlatformImplementation
 
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
+            if (context.Request.Path == "/metrics")
+            {
+                await next(context);
+
+                return;
+                
+            }
+
+            var counter = Metrics.CreateCounter("Platform", "HTTP", new CounterConfiguration
+            {
+                LabelNames = new[] { "method", "endpoint" }
+            });
+
+            counter.WithLabels("GET", "/test");
+
             // Platform Validate Token
             var authorizationHeader = context.Request.Headers.FirstOrDefault(c => c.Key.ToLower() == "authorization");
 
@@ -111,6 +127,8 @@ namespace PlatformImplementation
             // Service method invocation - DONE
 
             // Service does logging - DONE
+
+
 
             await next(context);
         }
