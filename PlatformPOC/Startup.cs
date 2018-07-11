@@ -1,5 +1,5 @@
-﻿using System;
-using System.Reflection;
+﻿using App.Metrics;
+using App.Metrics.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
@@ -8,8 +8,9 @@ using Microsoft.Extensions.DependencyInjection;
 using PlatformImplementation;
 using PlatformPOC.PlatformContracts;
 using PlatformPOC.PlatformImplementation;
-using Prometheus;
 using Serilog;
+using System;
+using System.Reflection;
 
 namespace PlatformPOC
 {
@@ -38,7 +39,7 @@ namespace PlatformPOC
             var assembly = Assembly.LoadFile(@"G:\Code\Source\projects\netCorePOC\TestService\bin\Debug\netcoreapp2.0\TestService.dll");
             foreach (var serviceMethod in assembly.ExportedTypes)
             {
-                services.AddTransient(typeof(IServiceMethod), serviceMethod.UnderlyingSystemType);                
+                services.AddTransient(typeof(IServiceMethod), serviceMethod.UnderlyingSystemType);
             }
 
             var part = new AssemblyPart(assembly);
@@ -46,6 +47,14 @@ namespace PlatformPOC
                 .ConfigureApplicationPartManager(apm => apm.ApplicationParts.Add(part));
 
             services.AddTransient<PlatformMiddleware>();
+
+
+            //Metrics
+            var metrics = new MetricsBuilder()
+                .OutputMetrics.AsPrometheusProtobuf()
+                .Build();
+            services.AddMetrics(metrics);
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -55,13 +64,27 @@ namespace PlatformPOC
             {
                 app.UseDeveloperExceptionPage();
             }
-            
-            app.UseMiddleware<PlatformMiddleware>();
-            app.UseMetricServer("/metrics");
 
-            
+            app.UseMiddleware<PlatformMiddleware>();
+
+            // Metrics
+            //var metricRegistry = new DefaultCollectorRegistry();
+            //metricRegistry.GetOrAdd(collector);
+            //app.UseMetricServer("/metrics", metricRegistry);
+            //app.UseMetricsAllEndpoints();
 
             app.UseMvc();
+            //app.UseMetricsAllEndpoints();
+        }
+
+        private static Action<MetricsWebHostOptions> Configure()
+        {
+            return options =>
+            {
+
+
+                //options.TrackingMiddlewareOptions = middlewareOptions => { middlewareOptions.IgnoredHttpStatusCodes = new[] { 500 }; };
+            };
         }
     }
 }
