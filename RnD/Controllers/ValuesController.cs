@@ -43,7 +43,7 @@ namespace RnD.Controllers
         }
 
         [HttpGet("secured")]
-        [Authorize]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         public string GetSecured()
         {
             return "it works";
