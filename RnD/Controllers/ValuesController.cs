@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace RnD.Controllers
@@ -39,6 +40,13 @@ namespace RnD.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+        }
+
+        [HttpGet("secured")]
+        [Authorize]
+        public string GetSecured()
+        {
+            return "it works";
         }
     }
 }
