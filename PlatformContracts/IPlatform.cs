@@ -23,5 +23,7 @@ namespace PlatformPOC.PlatformContracts
         bool ValidateWellFormedJson(String body);
 
         bool ValidateWellFormedXml(String body);
+
+        string GetConfigurarion(string key);
     }
 }

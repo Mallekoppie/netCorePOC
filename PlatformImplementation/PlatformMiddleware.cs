@@ -41,7 +41,7 @@ namespace PlatformImplementation
                 return;
                 
             }
-
+            /*
             // Platform Validate Token
             var authorizationHeader = context.Request.Headers.FirstOrDefault(c => c.Key.ToLower() == "authorization");
 
@@ -72,7 +72,7 @@ namespace PlatformImplementation
 
                 return;
             }
-
+            */
             // Platform validate wellformed input            
             using (StreamReader reader = new StreamReader(context.Request.Body))
             {
@@ -105,15 +105,15 @@ namespace PlatformImplementation
                         }
 
                         // Service input value validation
-                        var serviceAuthorized = _service.ValidateRequestSchema(authorizationHeader.Value, body);
+                        //var serviceAuthorized = _service.ValidateRequestSchema(authorizationHeader.Value, body);
 
-                        if (serviceAuthorized == false)
-                        {
-                            context.Response.StatusCode = 400; //Something else for invalid schema access
-                            await context.Response.WriteAsync("Invalid Content");
+                        //if (serviceAuthorized == false)
+                        //{
+                          //  context.Response.StatusCode = 400; //Something else for invalid schema access
+                            //await context.Response.WriteAsync("Invalid Content");
 
-                            return;
-                        }
+                            //return;
+                        //}
                     }
                 }
             }

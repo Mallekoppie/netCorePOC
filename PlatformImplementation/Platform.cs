@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Protocols;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Protocols;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
@@ -15,11 +16,13 @@ namespace PlatformPOC.PlatformImplementation
     {
         IPlatformLogger _logger;
         Logger doNotUseSerilogger; // Do not use directly
+        IConfiguration _configuration;
 
-        public Platform(Logger logger)
+        public Platform(Logger logger, IConfiguration configuration)
         {
             doNotUseSerilogger = logger;
             _logger = GetLogger(typeof(Platform));
+            _configuration = configuration;
         }
 
         public bool ConfigureAuthorization(string tennantId, List<string> groups)
@@ -168,6 +171,11 @@ namespace PlatformPOC.PlatformImplementation
         public bool ValidateWellFormedXml(string body)
         {
             throw new NotImplementedException();
+        }
+
+        public string GetConfigurarion(string key)
+        {
+            return _configuration[key];
         }
     }
 }

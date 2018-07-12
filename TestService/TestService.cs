@@ -19,6 +19,12 @@ namespace TestService
             _logger = platform.GetLogger(typeof(TestService));
         }
 
+        [HttpGet("/config")]
+        public string GetConfig()
+        {
+            return $"Config retrieved: {_platform.GetConfigurarion("CustomConfigSection:SomeConfiguration")}";
+        }
+
         
         [HttpGet("claims", Name = "GetClaims")]
         public IEnumerable<string> GetClaims()

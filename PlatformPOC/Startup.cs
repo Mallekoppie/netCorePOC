@@ -10,6 +10,7 @@ using PlatformPOC.PlatformContracts;
 using PlatformPOC.PlatformImplementation;
 using Serilog;
 using System;
+using System.IO;
 using System.Reflection;
 
 namespace PlatformPOC
@@ -54,6 +55,14 @@ namespace PlatformPOC
                 .OutputMetrics.AsPrometheusProtobuf()
                 .Build();
             services.AddMetrics(metrics);
+
+            var builder = new ConfigurationBuilder()
+           .SetBasePath(Directory.GetCurrentDirectory())
+           .AddJsonFile("appsettings.json");
+
+            var configuration = builder.Build();
+
+            services.AddSingleton<IConfiguration>(configuration);
 
         }
 
