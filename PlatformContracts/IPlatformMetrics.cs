@@ -12,6 +12,6 @@ namespace PlatformContracts
         void IncrementError400Requests();
         void IncrementError500Requests();
 
-        Task TrackSlaSelf(Action action);
+        Task TrackSlaSelf(Func<Task> action);
     }
 }

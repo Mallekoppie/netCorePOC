@@ -37,11 +37,12 @@ namespace PlatformImplementation
             _metrics.Measure.Meter.Mark(MetricsRegistry.SuccessfullRequests);
         }
 
-        public async Task TrackSlaSelf(Action action)
+        public async Task TrackSlaSelf(Func<Task> action)
         {
             using (_metrics.Measure.Timer.Time(MetricsRegistry.ExecutionTimeSelfResource))
             {
                 await Task.Run(action);
+                
             }
         }
     }

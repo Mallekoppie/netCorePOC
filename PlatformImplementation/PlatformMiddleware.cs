@@ -79,27 +79,11 @@ namespace PlatformImplementation
                             return;
                         }
 
-                        // Service input value validation
-                        //var serviceAuthorized = _service.ValidateRequestSchema(authorizationHeader.Value, body);
-
-                        //if (serviceAuthorized == false)
-                        //{
-                        //  context.Response.StatusCode = 400; //Something else for invalid schema access
-                        //await context.Response.WriteAsync("Invalid Content");
-
-                        //return;
-                        //}
                     }
                 }
-            }
+            }          
 
-            // Service method invocation - DONE
-
-            // Service does logging - DONE
-
-
-            await _metrics.TrackSlaSelf(() => 
-            next(context));
+            await _metrics.TrackSlaSelf(() => next(context));
 
             TrackMetrics(context);
         }

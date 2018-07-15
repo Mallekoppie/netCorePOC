@@ -3,6 +3,8 @@ using PlatformPOC.PlatformContracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace TestService
 {
@@ -15,7 +17,7 @@ namespace TestService
 
         public TestService(IPlatform platform)
         {
-            this._platform = platform;
+            _platform = platform;
             _logger = platform.GetLogger(typeof(TestService));
         }
 
@@ -93,6 +95,21 @@ namespace TestService
         public void CreateErrorToTrackMetrics()
         {
             throw new Exception("Test exception");
+        }
+
+        [HttpGet("remote")]
+        public async Task<string> CallRemote()
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                var result = await client.GetAsync("http://localhost:10000/returnjsonBody");
+
+                var textResponse = await result.Content.ReadAsStringAsync();
+
+
+                return textResponse;
+            }
+
         }
 
         public bool Authorise(string token)
