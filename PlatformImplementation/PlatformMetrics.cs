@@ -1,8 +1,10 @@
 ﻿using App.Metrics;
+using App.Metrics.Timer;
 using PlatformContracts;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace PlatformImplementation
 {
@@ -33,6 +35,14 @@ namespace PlatformImplementation
         public void IncrementTotalSuccessRequests()
         {
             _metrics.Measure.Meter.Mark(MetricsRegistry.SuccessfullRequests);
+        }
+
+        public async Task TrackSlaSelf(Action action)
+        {
+            using (_metrics.Measure.Timer.Time(MetricsRegistry.ExecutionTimeSelfResource))
+            {
+                await Task.Run(action);
+            }
         }
     }
 }

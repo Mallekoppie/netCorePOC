@@ -1,6 +1,7 @@
 ﻿using App.Metrics;
 using App.Metrics.Counter;
 using App.Metrics.Meter;
+using App.Metrics.Timer;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -31,6 +32,14 @@ namespace PlatformImplementation
         {
             Name = "Error 500 Requests",
             MeasurementUnit = Unit.Calls
+        };
+
+        public static TimerOptions ExecutionTimeSelfResource => new TimerOptions
+        {
+            Name = "SLA Self Method Execution ms",
+            DurationUnit = TimeUnit.Milliseconds,
+            MeasurementUnit = Unit.Requests,
+            RateUnit = TimeUnit.Milliseconds
         };
     }
 }

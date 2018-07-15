@@ -24,7 +24,7 @@ namespace PlatformImplementation
             _platform = platform;
             _service = service;
             _logger = platform.GetLogger(typeof(PlatformMiddleware));
-            _metrics = metrics;        
+            _metrics = metrics;
         }
 
         private async Task ReturnUnAuthorized(HttpContext context)
@@ -43,11 +43,11 @@ namespace PlatformImplementation
                 await next(context);
 
                 return;
-                
+
             }
 
             _metrics.IncrementTotalRequests();
-           
+
             // Platform validate wellformed input            
             using (StreamReader reader = new StreamReader(context.Request.Body))
             {
@@ -84,10 +84,10 @@ namespace PlatformImplementation
 
                         //if (serviceAuthorized == false)
                         //{
-                          //  context.Response.StatusCode = 400; //Something else for invalid schema access
-                            //await context.Response.WriteAsync("Invalid Content");
+                        //  context.Response.StatusCode = 400; //Something else for invalid schema access
+                        //await context.Response.WriteAsync("Invalid Content");
 
-                            //return;
+                        //return;
                         //}
                     }
                 }
@@ -98,15 +98,15 @@ namespace PlatformImplementation
             // Service does logging - DONE
 
 
-
-            await next(context);
+            await _metrics.TrackSlaSelf(() => 
+            next(context));
 
             TrackMetrics(context);
         }
 
         private void TrackMetrics(HttpContext context)
         {
-            
+
             var status = context.Response.StatusCode;
 
             if (status >= 200 && status < 300)
