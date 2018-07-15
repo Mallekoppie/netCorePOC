@@ -1,8 +1,11 @@
 ﻿using App.Metrics;
 using App.Metrics.AspNetCore;
+using App.Metrics.Extensions.Configuration;
 using App.Metrics.Formatters.Prometheus;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using System.IO;
 
 namespace PlatformPOC
 {
@@ -13,22 +16,18 @@ namespace PlatformPOC
             BuildWebHost(args).Run();
         }
 
-
-        /*
-        public static IWebHost BuildWebHost(string[] args) =>
-            
-        WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>()
-                .Build();
-                */
-
         public static IMetricsRoot Metrics { get; set; }
 
         public static IWebHost BuildWebHost(string[] args)
         {
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json").Build();
+
             Metrics = AppMetrics.CreateDefaultBuilder()
                     .OutputMetrics.AsPrometheusPlainText()
                     .OutputMetrics.AsPrometheusProtobuf()
+                    .Configuration.ReadFrom(configuration)
                     .Build();
 
             return WebHost.CreateDefaultBuilder(args)

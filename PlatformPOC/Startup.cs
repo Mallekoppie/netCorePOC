@@ -61,16 +61,6 @@ namespace PlatformPOC
 
             services.AddSingleton<IConfiguration>(configuration);
 
-            //Metrics
-            var metrics = new MetricsBuilder()
-                .OutputMetrics.AsPrometheusProtobuf()
-                .OutputMetrics.AsPrometheusPlainText()
-                .Configuration.ReadFrom(configuration)
-                .Build();
-            services.AddMetrics(metrics);
-
-           
-
             services.AddAuthentication(o =>
             {
                 o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -105,14 +95,7 @@ namespace PlatformPOC
 
             app.UseMiddleware<PlatformMiddleware>();
 
-            // Metrics
-            //var metricRegistry = new DefaultCollectorRegistry();
-            //metricRegistry.GetOrAdd(collector);
-            //app.UseMetricServer("/metrics", metricRegistry);
-            //app.UseMetricsAllEndpoints();
-
             app.UseMvc();
-            //app.UseMetricsAllEndpoints();
         }
 
         private static Action<MetricsWebHostOptions> Configure()
