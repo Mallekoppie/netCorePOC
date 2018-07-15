@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using PlatformContracts;
 using PlatformImplementation;
 using PlatformPOC.PlatformContracts;
 using PlatformPOC.PlatformImplementation;
@@ -37,6 +38,7 @@ namespace PlatformPOC
             services.AddSingleton(log);
 
             services.AddSingleton<IPlatform, Platform>();
+            services.AddSingleton<IPlatformMetrics, PlatformMetrics>();
 
             // Load Services from external assembly
             // TODO: Load assembly location from configuration
@@ -96,6 +98,7 @@ namespace PlatformPOC
             app.UseMiddleware<PlatformMiddleware>();
 
             app.UseMvc();
+            app.UseMetricsAllEndpoints();
         }
 
         private static Action<MetricsWebHostOptions> Configure()

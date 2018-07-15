@@ -89,6 +89,12 @@ namespace TestService
             _logger.LogInformation("Entered Delete");
         }
 
+        [HttpGet("error")]
+        public void CreateErrorToTrackMetrics()
+        {
+            throw new Exception("Test exception");
+        }
+
         public bool Authorise(string token)
         {
             if (token.Contains("deny"))

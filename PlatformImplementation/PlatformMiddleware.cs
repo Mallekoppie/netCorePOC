@@ -5,6 +5,7 @@ using System.Net.Mime;
 using System.Threading.Tasks;
 using App.Metrics;
 using Microsoft.AspNetCore.Http;
+using PlatformContracts;
 using PlatformPOC.PlatformContracts;
 using Prometheus;
 using Prometheus.Advanced;
@@ -16,9 +17,9 @@ namespace PlatformImplementation
         private IPlatform _platform;
         private IServiceMethod _service;
         private IPlatformLogger _logger;
-        private IMetrics _metrics;
+        private IPlatformMetrics _metrics;
 
-        public PlatformMiddleware(IPlatform platform, IServiceMethod service, IMetrics metrics)
+        public PlatformMiddleware(IPlatform platform, IServiceMethod service, IPlatformMetrics metrics)
         {
             _platform = platform;
             _service = service;
@@ -45,8 +46,7 @@ namespace PlatformImplementation
                 
             }
 
-            // This should be total calls
-            _metrics.Measure.Counter.Increment(MetricsRegistry.SuccessfullCalls);
+            _metrics.IncrementTotalRequests();
            
             // Platform validate wellformed input            
             using (StreamReader reader = new StreamReader(context.Request.Body))
@@ -100,6 +100,30 @@ namespace PlatformImplementation
 
 
             await next(context);
+
+            TrackMetrics(context);
         }
+
+        private void TrackMetrics(HttpContext context)
+        {
+            
+            var status = context.Response.StatusCode;
+
+            if (status >= 200 && status < 300)
+            {
+                _metrics.IncrementTotalSuccessRequests();
+            }
+
+            if (status >= 400 && status < 500)
+            {
+                _metrics.IncrementError400Requests();
+            }
+
+            if (status > 500)
+            {
+                _metrics.IncrementError500Requests();
+            }
+        }
+
     }
 }
