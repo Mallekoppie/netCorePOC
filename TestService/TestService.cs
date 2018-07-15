@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PlatformContracts;
 using PlatformPOC.PlatformContracts;
 using System;
 using System.Collections.Generic;
@@ -14,11 +15,13 @@ namespace TestService
     {
         IPlatform _platform;
         IPlatformLogger _logger;
+        IPlatformMetrics _metrics;
 
         public TestService(IPlatform platform)
         {
             _platform = platform;
             _logger = platform.GetLogger(typeof(TestService));
+            _metrics = _platform.GetMetrics();
         }
 
         [HttpGet("/config")]
@@ -102,14 +105,17 @@ namespace TestService
         {
             using (HttpClient client = new HttpClient())
             {
-                var result = await client.GetAsync("http://localhost:10000/returnjsonBody");
+                String textResponse = "";
 
-                var textResponse = await result.Content.ReadAsStringAsync();
+                await _metrics.TrackSlaRemote("testServer", async () => 
+                {
+                    var result = await client.GetAsync("http://localhost:10000/returnjsonBody");                    
 
-
+                    textResponse = await result.Content.ReadAsStringAsync();
+                });
+                
                 return textResponse;
             }
-
         }
 
         public bool Authorise(string token)

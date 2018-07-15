@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PlatformContracts;
+using System;
 using System.Collections.Generic;
 
 namespace PlatformPOC.PlatformContracts
@@ -23,5 +24,7 @@ namespace PlatformPOC.PlatformContracts
         bool ValidateWellFormedXml(String body);
 
         string GetConfigurarion(string key);
+
+        IPlatformMetrics GetMetrics();
     }
 }

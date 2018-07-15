@@ -3,6 +3,7 @@ using Microsoft.IdentityModel.Protocols;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+using PlatformContracts;
 using PlatformPOC.PlatformContracts;
 using Serilog.Core;
 using System;
@@ -17,12 +18,14 @@ namespace PlatformPOC.PlatformImplementation
         IPlatformLogger _logger;
         Logger doNotUseSerilogger; // Do not use directly
         IConfiguration _configuration;
+        IPlatformMetrics _metrics;
 
-        public Platform(Logger logger, IConfiguration configuration)
+        public Platform(Logger logger, IConfiguration configuration, IPlatformMetrics metrics)
         {
             doNotUseSerilogger = logger;
             _logger = GetLogger(typeof(Platform));
             _configuration = configuration;
+            _metrics = metrics;
         }
 
         public bool ConfigureAuthorization(string tennantId, List<string> groups)
@@ -87,6 +90,11 @@ namespace PlatformPOC.PlatformImplementation
         public string GetConfigurarion(string key)
         {
             return _configuration[key];
+        }
+
+        public IPlatformMetrics GetMetrics()
+        {
+            return _metrics;
         }
     }
 }

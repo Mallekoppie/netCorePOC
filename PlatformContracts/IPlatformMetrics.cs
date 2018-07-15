@@ -13,5 +13,6 @@ namespace PlatformContracts
         void IncrementError500Requests();
 
         Task TrackSlaSelf(Func<Task> action);
+        Task TrackSlaRemote(string remoteName, Func<Task> action);
     }
 }

@@ -41,5 +41,13 @@ namespace PlatformImplementation
             MeasurementUnit = Unit.Requests,
             RateUnit = TimeUnit.Milliseconds
         };
+
+        public static TimerOptions ExecutionTimeRemote => new TimerOptions
+        {
+            Name = "SLA Remote Method Execution ms: ",
+            DurationUnit = TimeUnit.Milliseconds,
+            MeasurementUnit = Unit.Requests,
+            RateUnit = TimeUnit.Milliseconds
+        };
     }
 }

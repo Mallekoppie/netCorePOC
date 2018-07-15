@@ -45,5 +45,16 @@ namespace PlatformImplementation
                 
             }
         }
+
+        public async Task TrackSlaRemote(string remoteName, Func<Task> action)
+        {
+            var options = MetricsRegistry.ExecutionTimeRemote;
+            options.Name += remoteName;
+            using (_metrics.Measure.Timer.Time(options))
+            {
+                await Task.Run(action);
+
+            }
+        }
     }
 }

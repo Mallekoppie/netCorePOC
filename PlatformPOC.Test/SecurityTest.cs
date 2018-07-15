@@ -15,7 +15,7 @@ namespace PlatformPOC.Test
             //Given a valid json body
             string validJsonBody = TestResources.WellFormedJson;
             
-            IPlatform platform = new Platform(null, null);
+            IPlatform platform = new Platform(null, null, null);
 
             //When we validate that it is well formed
             var result = platform.ValidateWellFormedJson(validJsonBody);
@@ -30,7 +30,7 @@ namespace PlatformPOC.Test
             //Given a valid json body
             string validJsonBody = TestResources.NotWellFormedJson;
             
-            IPlatform platform = new Platform(null, null);
+            IPlatform platform = new Platform(null, null, null);
 
             //When we validate that it is well formed
             var result = platform.ValidateWellFormedJson(validJsonBody);
