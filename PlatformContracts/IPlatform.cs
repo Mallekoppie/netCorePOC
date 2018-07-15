@@ -18,8 +18,6 @@ namespace PlatformPOC.PlatformContracts
 
         String GetValueForTesting();
 
-        bool ValidateOAuth2Token(String token);
-
         bool ValidateWellFormedJson(String body);
 
         bool ValidateWellFormedXml(String body);

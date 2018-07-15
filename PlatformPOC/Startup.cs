@@ -1,10 +1,13 @@
 ﻿using App.Metrics;
 using App.Metrics.AspNetCore;
+using App.Metrics.Extensions.Configuration;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using PlatformImplementation;
 using PlatformPOC.PlatformContracts;
 using PlatformPOC.PlatformImplementation;
@@ -49,20 +52,46 @@ namespace PlatformPOC
 
             services.AddTransient<PlatformMiddleware>();
 
-
-            //Metrics
-            var metrics = new MetricsBuilder()
-                .OutputMetrics.AsPrometheusProtobuf()
-                .Build();
-            services.AddMetrics(metrics);
-
+            // Configuration
             var builder = new ConfigurationBuilder()
-           .SetBasePath(Directory.GetCurrentDirectory())
-           .AddJsonFile("appsettings.json");
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json");
 
             var configuration = builder.Build();
 
             services.AddSingleton<IConfiguration>(configuration);
+
+            //Metrics
+            var metrics = new MetricsBuilder()
+                .OutputMetrics.AsPrometheusProtobuf()
+                .OutputMetrics.AsPrometheusPlainText()
+                .Configuration.ReadFrom(configuration)
+                .Build();
+            services.AddMetrics(metrics);
+
+           
+
+            services.AddAuthentication(o =>
+            {
+                o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(cfg =>
+            {
+                // only for testing
+                cfg.RequireHttpsMetadata = false;
+                cfg.Authority = "http://localhost:8180/auth/realms/SpringBootKeycloak";
+                cfg.IncludeErrorDetails = true;
+                cfg.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateAudience = false,
+                    ValidateIssuerSigningKey = true,
+                    ValidateIssuer = true,
+                    ValidIssuer = "http://localhost:8180/auth/realms/SpringBootKeycloak",
+                    ValidateLifetime = true
+                };
+
+            });
 
         }
 

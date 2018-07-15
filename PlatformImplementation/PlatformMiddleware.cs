@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Mime;
 using System.Threading.Tasks;
+using App.Metrics;
 using Microsoft.AspNetCore.Http;
 using PlatformPOC.PlatformContracts;
 using Prometheus;
@@ -15,12 +16,14 @@ namespace PlatformImplementation
         private IPlatform _platform;
         private IServiceMethod _service;
         private IPlatformLogger _logger;
+        private IMetrics _metrics;
 
-        public PlatformMiddleware(IPlatform platform, IServiceMethod service)
+        public PlatformMiddleware(IPlatform platform, IServiceMethod service, IMetrics metrics)
         {
             _platform = platform;
             _service = service;
             _logger = platform.GetLogger(typeof(PlatformMiddleware));
+            _metrics = metrics;        
         }
 
         private async Task ReturnUnAuthorized(HttpContext context)
@@ -41,38 +44,10 @@ namespace PlatformImplementation
                 return;
                 
             }
-            /*
-            // Platform Validate Token
-            var authorizationHeader = context.Request.Headers.FirstOrDefault(c => c.Key.ToLower() == "authorization");
 
-            //If there is no header then reject the call
-            if (authorizationHeader.Key == null)
-            {
-                _logger.LogError($"{context.Request.Path} does not have a Authorization header");
-                // TODO: Add specific logging
-                await ReturnUnAuthorized(context);
-
-                return;
-            }
-
-            // If the token is not valid reject the call
-            if (_platform.ValidateOAuth2Token(authorizationHeader.Value) == false)
-            {
-                // TODO: Add specific logging
-                _logger.LogError("Token validation failed");
-                await ReturnUnAuthorized(context);
-
-                return;
-            }
-
-            // Service authorise
-            if (_service.Authorise(authorizationHeader.Value) == false)
-            {
-                await ReturnUnAuthorized(context);
-
-                return;
-            }
-            */
+            // This should be total calls
+            _metrics.Measure.Counter.Increment(MetricsRegistry.SuccessfullCalls);
+           
             // Platform validate wellformed input            
             using (StreamReader reader = new StreamReader(context.Request.Body))
             {

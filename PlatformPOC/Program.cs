@@ -43,6 +43,7 @@ namespace PlatformPOC
                                     };
                                 })
                             .UseStartup<Startup>()
+                            .UseUrls("http://localhost:10010/")
                             .Build();
         }
 

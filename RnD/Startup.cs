@@ -33,84 +33,27 @@ namespace RnD
         {
             services.AddMvc();
 
-            /*services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = OpenIdConnectDefaults.AuthenticationScheme;
-                //options.DefaultSignInScheme = OpenIdConnectDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
-                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-
-            })*/
-            //services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            /*  .AddOpenIdConnect(options =>
-              {
-                  //options.Authority = "http://localhost:8180/auth/realms/SpringBootKeycloak";
-                  options.ClientId = "netcore";
-                  //options.ClientSecret = "e0c09ec8-0d8d-448b-b2d4-690de421803c";
-                  options.RequireHttpsMetadata = false; // For local development
-                  //options.MetadataAddress = "http://localhost:8180/auth/realms/SpringBootKeycloak/.well-known/openid-configuration";
-                  //options.AuthenticationMethod = OpenIdConnectRedirectBehavior.RedirectGet;
-
-              })*/
-            /*.AddJwtBearer("bearer", options =>
-            {
-                options.Authority = "http://localhost:8180/auth/realms/SpringBootKeycloak";
-                options.Audience = "netcore";
-                //options.Challenge = "WWW-Authenticate";
-                options.RequireHttpsMetadata = false; // For local development
-                options.MetadataAddress = "http://localhost:8180/auth/realms/SpringBootKeycloak/.well-known/openid-configuration";
-                options.SaveToken = true;
-                //options.RefreshOnIssuerKeyNotFound = true;                
-                 options.ConfigurationManager = new ConfigurationManager<OpenIdConnectConfiguration>("http://localhost:8180/auth/realms/SpringBootKeycloak/.well-known/openid-configuration",
-                     new OpenIdConnectConfigurationRetriever(), new HttpDocumentRetriever() { RequireHttps = false });
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                    ValidateLifetime = false,
-                    ValidateIssuerSigningKey = false,
-                    ValidIssuer = "http://localhost:8180/auth/realms/SpringBootKeycloak",
-                    ValidAudience = "netcore",
-                    RequireSignedTokens = false,
-                };
-
-                options.IncludeErrorDetails = true;
-
-            });*/
-            /*.AddJwtBearer(options =>
-             {
-                 options.TokenValidationParameters = new TokenValidationParameters
-                 {
-                     ValidateIssuer = false,
-                     ValidateAudience = false,
-                     ValidateLifetime = false,
-                     ValidateIssuerSigningKey = false,
-                     ValidIssuer = "http://localhost:8180/auth/realms/SpringBootKeycloak",
-                     ValidAudience = "netcore"
-                 };
-             });*/
-
             services.AddAuthentication(o =>
             {
                 o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-    .AddJwtBearer(cfg =>
-    {
-        // only for testing
-        cfg.RequireHttpsMetadata = false;
-        cfg.Authority = "http://localhost:8180/auth/realms/SpringBootKeycloak";
-        cfg.IncludeErrorDetails = true;
-        cfg.TokenValidationParameters = new TokenValidationParameters()
-        {
-            ValidateAudience = false,
-            ValidateIssuerSigningKey = true,
-            ValidateIssuer = true,
-            ValidIssuer = "http://localhost:8180/auth/realms/SpringBootKeycloak",
-            ValidateLifetime = true
-        };
+            .AddJwtBearer(cfg =>
+            {
+                // only for testing
+                cfg.RequireHttpsMetadata = false;
+                cfg.Authority = "http://localhost:8180/auth/realms/SpringBootKeycloak";
+                cfg.IncludeErrorDetails = true;
+                cfg.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateAudience = false,
+                    ValidateIssuerSigningKey = true,
+                    ValidateIssuer = true,
+                    ValidIssuer = "http://localhost:8180/auth/realms/SpringBootKeycloak",
+                    ValidateLifetime = true
+                };
 
-    });
+            });
 
         }
 
