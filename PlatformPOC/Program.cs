@@ -41,6 +41,7 @@ namespace PlatformPOC
                                         endpointsOptions.MetricsEndpointOutputFormatter = new MetricsPrometheusProtobufOutputFormatter(new MetricsPrometheusOptions());
                                     };
                                 })
+                                .UseMetricsWebTracking()
                             .UseStartup<Startup>()
                             .UseUrls("http://localhost:10010/")
                             .Build();

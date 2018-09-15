@@ -83,7 +83,7 @@ namespace PlatformPOC
                     ValidateLifetime = true
                 };
 
-            });
+            });            
 
         }
 
@@ -97,8 +97,7 @@ namespace PlatformPOC
 
             app.UseMiddleware<PlatformMiddleware>();
 
-            app.UseMvc();
-            app.UseMetricsAllEndpoints();
+            app.UseMvc();                        
         }
 
         private static Action<MetricsWebHostOptions> Configure()
