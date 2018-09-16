@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlatformImplementation", "P
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestService", "TestService\TestService.csproj", "{E541B0B7-6393-4682-B467-F39700470E9C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RnD", "RnD\RnD.csproj", "{5FD0E80B-1BE7-4DFF-87C2-C07A5ED2370A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RnD", "RnD\RnD.csproj", "{5FD0E80B-1BE7-4DFF-87C2-C07A5ED2370A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestApp", "TestApp\TestApp.csproj", "{5F389C26-2DFF-4A4A-9C5C-4A9EDC9B640F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{5FD0E80B-1BE7-4DFF-87C2-C07A5ED2370A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5FD0E80B-1BE7-4DFF-87C2-C07A5ED2370A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5FD0E80B-1BE7-4DFF-87C2-C07A5ED2370A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F389C26-2DFF-4A4A-9C5C-4A9EDC9B640F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F389C26-2DFF-4A4A-9C5C-4A9EDC9B640F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F389C26-2DFF-4A4A-9C5C-4A9EDC9B640F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F389C26-2DFF-4A4A-9C5C-4A9EDC9B640F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
